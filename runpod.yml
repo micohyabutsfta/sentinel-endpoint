@@ -1,4 +1,2 @@
 version: "1"
 entrypoint: "python3 main.py"
-ports:
-  - "8000"

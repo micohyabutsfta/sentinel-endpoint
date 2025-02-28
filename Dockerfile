@@ -4,6 +4,8 @@ FROM nvcr.io/nvidia/pytorch:23.10-py3
 # Set the working directory inside the container
 WORKDIR /app
 
+
+
 # Install necessary packages
 RUN apt-get update && apt-get install -y \
     git \
@@ -13,6 +15,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN python3 -c "from huggingface_hub import snapshot_download; snapshot_download('micohyabutsfta/Sentinel-2.0')"
 # Copy the application code
 COPY . .
 

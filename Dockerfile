@@ -1,6 +1,6 @@
 # Use RunPod's recommended PyTorch image
 # FROM runpod/pytorch:2.1.2-cuda12.1.1-devel
-
+FROM huggingface/transformers-pytorch-gpu:4.37.0
 # Set the working directory inside the container
 WORKDIR /app
 

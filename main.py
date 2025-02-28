@@ -1,20 +1,25 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from huggingface_hub import snapshot_download
 
 app = FastAPI()
 
+# Define request model
+class PromptRequest(BaseModel):
+    prompt: str
+
 # Load model from Hugging Face
 repo_id = "micohyabutsfta/Sentinel-2.0"
-model_path = snapshot_download(repo_id)  # Downloads the model files locally
+model_path = snapshot_download(repo_id)
 
 model = AutoModelForCausalLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
 @app.post("/generate")
-async def generate(prompt: str):
-    inputs = tokenizer(prompt, return_tensors="pt")
+async def generate(request: PromptRequest):
+    inputs = tokenizer(request.prompt, return_tensors="pt")
     output = model.generate(**inputs)
     response = tokenizer.decode(output[0], skip_special_tokens=True)
     return {"response": response}
